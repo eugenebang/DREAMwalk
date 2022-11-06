@@ -7,8 +7,11 @@ We also provide codes for calculating semantic similarities of entities given hi
 ## Model description
 
 The full model architecture is provided below. DREAMwalk's drug-disease association prediction pipeline is consisted of three steps;
+
 Step 1. Edge type transition matrix training
+
 Step 2. Node embedding generation through teleport-guided random walk
+
 Step 3. Drug-disease association prediction (or prediction of any other links)
 
 ![model1](img/model_overview.png)
