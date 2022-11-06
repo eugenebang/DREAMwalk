@@ -10,6 +10,8 @@ Step 1. Edge type transition matrix training
 Step 2. Node embedding generation through teleport-guided random walk
 Step 3. Drug-disease association prediction (or prediction of any other links)
 
+![model1](img/model_overview.png)
+
 ## Run the model
 1. For embedding vector generation, with input network file for embedding:
 ```
