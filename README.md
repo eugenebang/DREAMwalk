@@ -15,18 +15,22 @@ Step 3. Drug-disease association prediction (or prediction of any other links)
 ## Input File formats
 
 **Hierarchy file**
+
 The input hierarchy file for semantic similarity calculation should be a `.csv` file with following information:
 ```python
 child, parent
 ```
 
 **Network file**
+
 The input network file should be a tab- or space-separated `.txt` file with following orders:
 ```python
 source target weight edge_type edge_id
 ```
 
-**Positive/negative data**
+**Positive/negative pairs**
+
+Positive/negative pair information for link prediction task should be 
 
 
 ## Run the model
@@ -44,7 +48,6 @@ python generate_embeddings.py -i input_network.txt -o embedding_file.pkl
 ```
 python predict_association.py -e embedding_file.pkl -d dataset.csv -o predicted_output.csv
 ```
-
 
 ### Software requirements
 
