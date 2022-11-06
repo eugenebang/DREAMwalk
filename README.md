@@ -1,5 +1,6 @@
 # DREAMwalk
-The official code implementation for DREAMwalk in Python from our paper: "Multi-layer Guilt-by-association for drug repurposing"
+The official code implementation for DREAMwalk in Python from our paper: 
+- "Multi-layer Guilt-by-association for drug repurposing"
 
 We also provide codes for calculating semantic similarities of entities given hierarchy data, along with example heterogeneous network file and notebook file for generating node embedding and predicting associations.
 
