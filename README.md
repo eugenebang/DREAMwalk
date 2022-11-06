@@ -21,9 +21,9 @@ Step 3. Drug-disease association prediction (or prediction of any other links)
 **Hierarchy file**
 
 The input hierarchy file for semantic similarity calculation should be a `.csv` file with following information:
-```python
-child, parent
-```
+| Attempt | #1  |
+| ------- | --- |
+| child | parent |
 
 **Network file**
 
