@@ -20,17 +20,17 @@ Step 3. Drug-disease association prediction (or prediction of any other links)
 ## Run the model
 1. If similarity network for entities are required, run the following:
 ```
-python add_similarity_edges.py -i hierarchy_file.csv -n input_network.txt -c cut_off
+$ python add_similarity_edges.py -i hierarchy_file.csv -n input_network.txt -c cut_off
 ```
 
 2. For embedding vector generation, with input network file for embedding:
 ```
-python generate_embeddings.py -i input_network.txt -o embedding_file.pkl
+$ python generate_embeddings.py -i input_network.txt -o embedding_file.pkl
 ```
 
 3. For downstream linkprediction task please run: 
 ```
-python predict_association.py -e embedding_file.pkl -d dataset.csv -o predicted_output.csv
+$ python predict_association.py -e embedding_file.pkl -d dataset.csv -o predicted_output.csv
 ```
 
 The file formats for each input file can be found [here](demo/README.md).
