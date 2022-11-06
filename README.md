@@ -33,6 +33,8 @@ python generate_embeddings.py -i input_network.txt -o embedding_file.pkl
 python predict_association.py -e embedding_file.pkl -d dataset.csv -o predicted_output.csv
 ```
 
+The file formats for each input file can be found [here](demo/README.md).
+
 ### Software requirements
 
 **Operating system**
