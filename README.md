@@ -23,6 +23,22 @@ python generate_embeddings.py -i input_network.txt -o embedding_file.pkl
 python predict_association.py -e embedding_file.pkl -d dataset.csv -o predicted_output.csv
 ```
 
+### File formats
+
+**Hierarchy file**
+The input hierarchy file for semantic similarity calculation should be a `.csv` file with following information:
+```python
+child, parent
+```
+
+**Network file**
+The input network file should be a tab- or space-separated `.txt` file with following orders:
+```python
+source target weight edge_type edge_id
+```
+
+
+
 ### Software requirements
 
 **Operating system**
@@ -31,13 +47,16 @@ DREAMwalk training and evaluation were tested for *Linux* (Ubuntu 18.04) operati
 
 **Prerequisites**
 
-DREAMwalk training and evaluation were tested for the following software packages and versions.
+DREAMwalk training and evaluation were tested for the following python packages and versions.
 
-- **Python packages**
+- **For embedding generation**
   - `python`=3.9.6
-  - `pytorch`=1.9.0 (installed using cuda version 11.1)
   - `gensim`=1.????
+  - `networkx`=1.???
   - `numpy`=1.21.0
   - `pandas`=1.3.0
   - `scikit-learn`=0.24.2
   - `tqdm`=4.61.2
+  - 
+- **Additionally requried for link prediction**
+  - `pytorch`=1.9.0 (installed using cuda version 11.1)
