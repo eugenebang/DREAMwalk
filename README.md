@@ -1,9 +1,21 @@
     .
     ├── DREAMwalk/                          # Codes for DREAMwalk
             ├── add_similarity_edges.py     
+                ├── read_csv
+                ├── jaccard_index
+                ├── read_graph
             ├── generate_embedding.py       
+                ├── read_graph
+                ├── read_edge_type_matrix
+                ├── generate_tp_paths
+                ├── parmap_DREAMwalks
+                ├── node2vecTP_walk
+                ├── network_traverse
+                ├── teleport_operation
             ├── predict_association.py      
             └── utils.py                    # func for ranking query drugs from demo_repurposing.txt
+                ├── set_seed
+                ├── read_graph
     ├── demo/                               # demo files
             ├── demo_hierarchy.csv
             ├── demo_network.txt
@@ -44,6 +56,7 @@ $ python add_similarity_edges.py \
 ```
 $ python generate_embeddings.py  \
     --network_file=input_network.txt \
+    --sim_network_file=sim_network.txt \
     --output_file=embedding_file.pkl \
     --tp_factor=0.5 \
     --sim_edge_index=[1,2]
@@ -77,6 +90,6 @@ DREAMwalk training and evaluation were tested for the following python packages 
   - `pandas`=1.3.0
   - `scikit-learn`=0.24.2
   - `tqdm`=4.61.2
-  - 
+  - `parmap`=1.???
 - **Additionally requried for link prediction**
   - `pytorch`=1.9.0 (installed using cuda version 11.1)
