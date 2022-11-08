@@ -59,7 +59,6 @@ $ python generate_embeddings.py  \
     --sim_network_file=sim_network.txt \
     --output_file=embedding_file.pkl \
     --tp_factor=0.5 \
-    --sim_edge_index=[1,2]
 ```
 
 3. For downstream linkprediction task please run: 
