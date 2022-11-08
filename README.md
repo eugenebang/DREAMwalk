@@ -6,7 +6,7 @@
                 ├── read_graph
             ├── generate_embedding.py       
                 ├── read_graph
-                ├── read_edge_type_matrix
+                ├── train_edge_type_transition_matrix   # needs implementation
                 ├── generate_tp_paths
                 ├── parmap_DREAMwalks
                 ├── node2vecTP_walk
