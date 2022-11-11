@@ -1,7 +1,7 @@
 ## Run the model
-1. If similarity network for entities are required, run the following:
+1. To generate similarity network for drug/disease entities using hierarchy data, run the following:
 ```
-$ python add_similarity_edges.py \
+$ python generate_similarity_net.py \
     --hierarchy_file=hierarchy_file.csv \
     --network_file=input_network.txt \
     --cut_off=0.5
