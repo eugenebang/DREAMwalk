@@ -24,5 +24,5 @@ $ python predict_association.py \
     --output_file=predicted_output.csv
 ```
 
-The file formats for each input file can be found [here](demo/README.md).
+The file formats for each input file can be found [here](/demo/README.md).
 
