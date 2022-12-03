@@ -9,6 +9,8 @@ The input hierarchy file for semantic similarity calculation should be a `.csv` 
 | parent1 | parent2 |
 | ... | ... | 
 
+_Caution:_ All leafs should be branched out from root named as either 'disease' or 'drug'
+
 ### Network file
 
 The input network file should be a tab- or space-separated `.txt` file with following orders:
