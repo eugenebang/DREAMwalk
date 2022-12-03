@@ -7,6 +7,7 @@ The input hierarchy file for semantic similarity calculation should be a `.csv` 
 | ------- | --- |
 | child1 | parent1 |
 | parent1 | parent2 |
+| ... | ... | 
 
 ### Network file
 
