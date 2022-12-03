@@ -7,6 +7,9 @@ The input hierarchy file for semantic similarity calculation should be a `.csv` 
 | ------- | --- |
 | child1 | parent1 |
 | parent1 | parent2 |
+| parent2 | disease |
+| ... | ... | 
+| parent n | drug |
 | ... | ... | 
 
 _Caution:_ All leafs should be branched out from root named as either 'disease' or 'drug'
