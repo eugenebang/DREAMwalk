@@ -7,11 +7,12 @@ import pickle
 import networkx as nx
 import numpy as np   
 from scipy import stats
-
 from tqdm import tqdm
 import parmap
 
 from gensim.models import Word2Vec
+
+from utils import read_graph
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -28,26 +29,9 @@ def parse_args():
     parser.add_argument('--window_size', type=int, default=4)
     parser.add_argument('--workers', type=int, default=os.cpu_count(),
                        help='if default, set to all available cpu count')
-
+    parser.add_argument('--net_delimiter',type=str,default='\t',
+                       help='delimiter of networks file; default = tab')
     return parser.parse_args()
-
-def read_graph(edgeList,weighted=False, directed=False):
-    '''
-    Reads the input network in networkx.
-    '''
-    if weighted:
-        G = nx.read_edgelist(edgeList, nodetype=str, data=(('type',int),('weight',float),('id',int)), create_using=nx.MultiDiGraph())
-    else:
-        G = nx.read_edgelist(edgeList, nodetype=str,data=(('type',int),('id',int)), create_using=nx.MultiDiGraph())
-        for edge in G.edges():
-            edge=G[edge[0]][edge[1]]
-            for i in range(len(edge)):
-                edge[i]['weight'] = 1.0
-
-    if not directed:
-        G = G.to_undirected()
-
-    return G
 
 def generate_DREAMwalk_paths(G, G_sim, num_walks, walk_length,tp_factor, workers):
     '''
