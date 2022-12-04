@@ -124,7 +124,8 @@ if __name__ == '__main__':
     print('Reading network files...')
     G=read_graph(args.network_file,
                 weighted=args.weighted,
-                directed=args.directed)
+                directed=args.directed,
+                delimiter=args.net_delimiter)
     if args.sim_network_file:
         G_sim=read_graph(args.sim_network_file,
                         weighted=True,
