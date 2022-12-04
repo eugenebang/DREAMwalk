@@ -19,7 +19,7 @@
     ├── demo/                               # demo files
             ├── demo_hierarchy.csv
             ├── demo_network.txt
-            ├── demo_edges.csv
+            ├── demo_edges.tsv
             └── demo_repurposing.txt
     ├── example.ipynb                       # Notebook with example codes for DREAMwalk pipeline
     └── README.md
@@ -34,7 +34,7 @@ We also provide codes for calculating semantic similarities of entities given hi
 
 The full model architecture is provided below. DREAMwalk's drug-disease association prediction pipeline is consisted of three steps;
 
-Step 1. Edge type transition matrix training
+Step 1. Create semantic similarity network from clinical hierarchies
 
 Step 2. Node embedding generation through teleport-guided random walk
 
@@ -47,18 +47,19 @@ Step 3. Drug-disease association prediction (or prediction of any other links)
 1. If similarity network for entities are required, run the following:
 ```
 $ python add_similarity_edges.py \
-    --hierarchy_file=hierarchy_file.csv \
-    --network_file=input_network.txt \
-    --cut_off=0.5
+    --hierarchy_file hierarchy_file.csv \
+    --network_file input_network.txt \
+    --output_file similarity_network.txt \
+    --cut_off 0.5
 ```
 
 2. For embedding vector generation, with input network file for embedding:
 ```
 $ python generate_embeddings.py  \
-    --network_file=input_network.txt \
-    --sim_network_file=sim_network.txt \
-    --output_file=embedding_file.pkl \
-    --tp_factor=0.5 \
+    --network_file input_network.txt \
+    --sim_network_file sim_network.txt \
+    --output_file embedding_file.pkl \
+    --tp_factor 0.5 \
 ```
 
 3. For downstream linkprediction task please run: 
