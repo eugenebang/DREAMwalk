@@ -2,9 +2,10 @@
 1. To generate similarity network for drug/disease entities using hierarchy data, run the following:
 ```
 $ python generate_similarity_net.py \
-    --hierarchy_file=hierarchy_file.csv \
-    --network_file=input_network.txt \
-    --cut_off=0.5
+    --network_file input_network.txt \
+    --hierarchy_file hierarchy_file.csv \
+    --output_file sim_network.txt \
+    --cut_off 0.5
 ```
 
 2. For embedding vector generation, with input network file for embedding:
