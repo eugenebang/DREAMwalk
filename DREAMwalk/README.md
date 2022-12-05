@@ -10,11 +10,10 @@ $ python generate_similarity_net.py \
 
 2. For embedding vector generation, with input network file for embedding:
 ```
-$ python generate_embeddings.py  \
-    --network_file=input_network.txt \
-    --sim_network_file=sim_network.txt \
-    --output_file=embedding_file.pkl \
-    --tp_factor=0.5 \
+$ python generate_embedding.py\
+    --network_file input_network.txt \
+    --sim_network_file input_similarity_network.txt \
+    --dimension 5
 ```
 
 3. For downstream linkprediction task please run: 
