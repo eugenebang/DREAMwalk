@@ -125,7 +125,7 @@ def parse_args():
     return parser.parse_args()
     
 
-def main(networkf:str, hierf:str, outputf:str,
+def save_sim_graph(networkf:str, hierf:str, outputf:str,
          cutoff:float, weighted:bool=True, directed:bool=False, net_delimiter:str='\t'):
     G=read_graph(networkf,weighted=weighted,directed=directed,
              delimiter=net_delimiter)
@@ -156,4 +156,4 @@ if __name__ == '__main__':
      'weighted':args.weighted,
      'directed':args.directed,
      'net_delimiter':args.net_delimiter}
-    main(**args)
+    save_sim_graph(**args)
