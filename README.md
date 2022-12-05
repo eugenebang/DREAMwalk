@@ -65,9 +65,9 @@ $ python generate_embeddings.py  \
 3. For downstream linkprediction task please run: 
 ```
 $ python predict_association.py \
-    --embedding_file=embedding_file.pkl \
-    --pair_file=dataset.csv \
-    --output_file=predicted_output.csv
+    --embedding_file embedding_file.pkl \
+    --pair_file dataset.csv \
+    --output_file predicted_output.csv
 ```
 
 The file formats for each input file can be found [here](demo/README.md).
@@ -83,13 +83,13 @@ DREAMwalk training and evaluation were tested for *Linux* (Ubuntu 18.04) operati
 DREAMwalk training and evaluation were tested for the following python packages and versions.
 
 - **For embedding generation**
-  - `python`=3.9.6
-  - `gensim`=1.????
-  - `networkx`=1.???
-  - `numpy`=1.21.0
-  - `pandas`=1.3.0
+  - `python`= 3.9.6
+  - `gensim`= 4.0.1
+  - `networkx`= 2.5.1
+  - `numpy`=1.18.1
+  - `pandas`=1.1.0
   - `scikit-learn`=0.24.2
   - `tqdm`=4.61.2
-  - `parmap`=1.???
+  - `parmap`=1.6.0
 - **Additionally requried for link prediction**
   - `pytorch`=1.9.0 (installed using cuda version 11.1)
