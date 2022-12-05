@@ -57,6 +57,17 @@ def _parmap_walks(_, nodes, G, G_sim, walk_length,tp_factor):
         walks.append(_DREAMwalker(node, G, G_sim, walk_length,tp_factor))
     return walks
 
+def _DREAMwalker(start_node, G, G_sim, walk_length,tp_factor):
+    walk = [start_node]
+    while len(walk) < walk_length:
+        cur = walk[-1]
+        if (cur in G_sim.nodes()) & (np.random.rand() < tp_factor):
+            next_node=_teleport_operation(cur,G_sim)               
+        else:
+            next_node=_network_traverse(cur,G)
+        walk.append(next_node)
+    return walk
+
 def _network_traverse(cur,G):
     cur_nbrs = sorted(G.neighbors(cur))
     random.shuffle(cur_nbrs)
@@ -106,19 +117,6 @@ def _teleport_operation(cur,G_sim):
                 next = nbr
                 break
     return next
-
-def _DREAMwalker(start_node, G, G_sim, walk_length,tp_factor):
-    walk = [start_node]
-    while len(walk) < walk_length:
-        cur = walk[-1]
-        if (cur in G_sim.nodes()) & (np.random.rand() < tp_factor):
-            next_node=_teleport_operation(cur,G_sim)
-#             if not next_node:  # node not in G_sim
-#                 next_node=_network_traverse(cur,G)                
-        else:
-            next_node=_network_traverse(cur,G)
-        walk.append(next_node)
-    return walk
 
 def save_embedding_files(netf:str, sim_netf:str, outputf:str, weighted:bool, 
                          directed:bool, tp_factor:float, num_walks:int, walk_length:int, 
