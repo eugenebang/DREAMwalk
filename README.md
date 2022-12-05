@@ -42,6 +42,13 @@ Step 3. Drug-disease association prediction (or prediction of any other links)
 
 ![model1](img/model_overview.png)
 
+## Settings
+DREAMwalk is implemented with python 3.8. Please install the packages present in the requirements.txt file.
+For setup, please run:
+```
+$ pip install -r requirements.txt
+```
+
 
 ## Run the model
 1. If similarity network for entities are required, run the following:
