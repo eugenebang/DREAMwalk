@@ -21,6 +21,16 @@ The input network file should be a tab- or space-separated `.txt` file with foll
 source target weight edge_type edge_id
 ```
 
-### Positive/negative pairs
+### Positive/negative drug-disease association file
 
-Positive/negative pair information for link prediction task should be 
+Positive/negative pair information for drug-disease association prediction task should be input as a `.tsv` file with following structure:
+| drug | disease| label |
+| --- | --- | --- |
+| drug1 | disease1 | 1 |
+| drug2 | disease2 | 0 | 
+| ... | ... | ... |
+
+where `label == 1` refers to positive pairs and `label == 0` refers to negative pairs.
+
+## Example codes
+Sample code to generate the embedding space and predict drug-disease associations are provided in run_demo.ipynb.
