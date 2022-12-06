@@ -1,3 +1,6 @@
+## Example codes
+Sample code to generate the embedding space and predict drug-disease associations are provided in [`run_demo.ipynb`](demo/run_demo.ipynb).
+
 ## Input File formats
 
 ### Hierarchy file
@@ -31,6 +34,3 @@ Positive/negative pair information for drug-disease association prediction task 
 | ... | ... | ... |
 
 where `label == 1` refers to positive pairs and `label == 0` refers to negative pairs.
-
-## Example codes
-Sample code to generate the embedding space and predict drug-disease associations are provided in run_demo.ipynb.
