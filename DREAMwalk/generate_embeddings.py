@@ -12,7 +12,7 @@ import parmap
 
 from gensim.models import Word2Vec
 
-from utils import read_graph
+from DREAMwalk.utils import read_graph, set_seed
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -20,6 +20,7 @@ def parse_args():
     
     parser.add_argument('--sim_network_file', type=str, default='')
     parser.add_argument('--output_file', type=str, default='embedding_file.pkl')
+    parser.add_argument('--seed', type=float, default=42)
     parser.add_argument('--tp_factor', type=float, default=0.5)
     parser.add_argument('--weighted', type=bool, default=True)    
     parser.add_argument('--directed', type=bool, default=False)
@@ -32,19 +33,32 @@ def parse_args():
     parser.add_argument('--net_delimiter',type=str,default='\t',
                        help='delimiter of networks file; default = tab')
 
-    return parser.parse_args()
+    args=parser.parse_args()
+    args={
+        'netf':args.network_file,
+        'sim_netf':args.sim_network_file,
+        'outputf':args.output_file,
+        'tp_factor':args.tp_factor,
+        'seed':args.seed,
+        'weighted':args.weighted,
+        'directed':args.directed,
+        'num_walks':args.num_walks,
+        'walk_length':args.walk_length,
+        'dimension':args.dimension,
+        'window_size':args.window_size,
+        'workers':args.workers,
+        'net_delimiter':args.net_delimiter
+    }
+    return args
 
 def generate_DREAMwalk_paths(G, G_sim, num_walks, walk_length,tp_factor, workers):
-    '''
-    generate random walk paths constrainted by transition matrix
-    '''
     tot_walks = []
     nodes = list(G.nodes())
 
-    print(f'# of walkers : {min(num_walks,workers)} for {num_walks} times')
+#     print(f'# of walkers : {min(num_walks,workers)} for {num_walks} times')
     walks = parmap.map(_parmap_walks, range(num_walks), 
                         nodes, G, G_sim, walk_length,tp_factor,
-                        pm_pbar=True, pm_processes=min(num_walks,workers))
+                        pm_pbar=False, pm_processes=min(num_walks,workers))
     for walk in walks:
         tot_walks += walk
 
@@ -118,10 +132,11 @@ def _teleport_operation(cur,G_sim):
                 break
     return next
 
-def save_embedding_files(netf:str, sim_netf:str, outputf:str, weighted:bool, 
-                         directed:bool, tp_factor:float, num_walks:int, walk_length:int, 
-                         workers:int, dimension:int, window_size:int,
-                         net_delimiter:str='\t'):
+def save_embedding_files(netf:str, sim_netf:str, outputf:str, tp_factor:float=0.5, seed:int=42,
+                         directed:bool=False, weighted:bool=True, num_walks:int=100, 
+                         walk_length:int=10, workers:int=os.cpu_count(), dimension:int=128, 
+                         window_size:int=4, net_delimiter:str='\t',):
+    set_seed(seed)
     print('Reading network files...')
     G=read_graph(netf,weighted=weighted,directed=directed,
                  delimiter=net_delimiter)
@@ -140,7 +155,7 @@ def save_embedding_files(netf:str, sim_netf:str, outputf:str, weighted:bool,
     
     print('Generating node embeddings...')
     model = Word2Vec(walks, vector_size=dimension, window=window_size, 
-                     min_count=0, sg=1, workers=workers)
+                     min_count=0, sg=1, workers=workers, seed=seed)
     node_ids=model.wv.index_to_key
     node_embeddings=model.wv.vectors
 
@@ -150,22 +165,8 @@ def save_embedding_files(netf:str, sim_netf:str, outputf:str, weighted:bool,
     with open(outputf,'wb') as fw:
         pickle.dump(model_embeddings,fw)
 
-    print(f'Node embeddings saved in: {outputf}')
+    print(f'Node embeddings saved: {outputf}')
 
 if __name__ == '__main__':
     args=parse_args()
-    args={
-        'netf':args.network_file,
-        'sim_netf':args.sim_network_file,
-        'outputf':args.output_file,
-        'tp_factor':args.tp_factor,
-        'weighted':args.weighted,
-        'directed':args.directed,
-        'num_walks':args.num_walks,
-        'walk_length':args.walk_length,
-        'dimension':args.dimension,
-        'window_size':args.window_size,
-        'workers':args.workers,
-        'net_delimiter':args.net_delimiter
-    }
     save_embedding_files(**args)
