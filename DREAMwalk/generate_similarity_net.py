@@ -6,7 +6,7 @@ import pandas as pd
 import networkx as nx
 from collections import Counter, defaultdict
 
-from utils import read_graph
+from DREAMwalk.utils import read_graph
 
 def generate_sim_graph(hier_df:str,nodes:list,cutoff:float,directed:bool=True):
     tree=_generate_tree(hier_df,nodes)
@@ -122,7 +122,16 @@ def parse_args():
     parser.add_argument('--net_delimiter',type=str,default='\t',
                        help='delimiter of networks file; default = tab')
     
-    return parser.parse_args()
+    args=parser.parse_args()
+    args={'networkf':args.network_file,
+     'hierf':args.hierarchy_file,
+     'outputf':args.output_file,
+     'cutoff':args.cut_off,
+     'weighted':args.weighted,
+     'directed':args.directed,
+     'net_delimiter':args.net_delimiter}
+    
+    return args
     
 
 def save_sim_graph(networkf:str, hierf:str, outputf:str,
@@ -149,11 +158,4 @@ def save_sim_graph(networkf:str, hierf:str, outputf:str,
 
 if __name__ == '__main__':
     args=parse_args()
-    args={'networkf':args.network_file,
-     'hierf':args.hierarchy_file,
-     'outputf':args.output_file,
-     'cutoff':args.cut_off,
-     'weighted':args.weighted,
-     'directed':args.directed,
-     'net_delimiter':args.net_delimiter}
     save_sim_graph(**args)
