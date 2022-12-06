@@ -23,5 +23,5 @@ $ python predict_associations.py \
     --pair_file dataset.csv
 ```
 
-The file formats for each input file can be found [here](/demo/README.md).
+The file formats for each input file can be found [here](/demo).
 
