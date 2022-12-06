@@ -1,4 +1,5 @@
 import argparse
+
 import pickle
 import numpy as np
 from sklearn import metrics 
@@ -8,7 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 
-from utils import set_seed, EarlyStopper
+from DREAMwalk.utils import set_seed, EarlyStopper
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -23,7 +24,20 @@ def parse_args():
     parser.add_argument('--model_checkpoint', type=str, default='checkpoint.pt')
     parser.add_argument('--test_ratio', type=float, default=0.1)
     parser.add_argument('--validation_ratio', type=float, default=0.1)
-    return parser.parse_args()
+    
+    args=parser.parse_args()
+    args={'embeddingf':args.embedding_file,
+     'pairf':args.pair_file,
+     'seed':args.seed,
+     'patience':args.patience,
+     'device':args.device,
+     'h_dim':args.h_dim,
+     'lr':args.lr,
+     'modelf':args.model_checkpoint,
+     'testr':args.test_ratio,
+     'validr':args.validation_ratio
+     }
+    return args
 
 
 class mlp_model(nn.Module):
@@ -36,7 +50,7 @@ class mlp_model(nn.Module):
         x=F.relu(self.lin1(x))
         return torch.sigmoid(self.lin2(x))
     
-def split_dataset(pairf, embeddingf, validr, testr, seed):
+def split_dataset(pairf, embeddingf,validr, testr, seed):
     with open(embeddingf,'rb') as fin:
         embedding_dict=pickle.load(fin)
     
@@ -58,13 +72,17 @@ def split_dataset(pairf, embeddingf, validr, testr, seed):
         xs,ys,test_size=testr, random_state=seed, stratify=ys)
     if validr > 0:
         x['train'],x['valid'],y['train'],y['valid']=train_test_split(
-            x['train'],y['train'],test_size=validr/(1-testr), random_state=seed, stratify=y['train'])
+            x['train'],y['train'],test_size=validr/(1-testr), 
+            random_state=seed, stratify=y['train'])
     else:
         x['valid'],y['valid']=[],[]
+
     return x, y
 
-def predict_dda(embeddingf, pairf, seed, patience, device, 
-               h_dim, lr, modelf, validr, testr):
+def predict_dda(embeddingf:str, pairf:str, modelf:str, seed:int=42, patience:int=20,
+                device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
+                h_dim:int=128, lr:float=0.001, validr:float=0.1, testr:float=0.1):
+
     set_seed(seed)
     x,y=split_dataset(pairf, embeddingf,
                     validr, testr, seed)
@@ -96,7 +114,7 @@ def predict_dda(embeddingf, pairf, seed, patience, device,
     x_test=x_test.to(device)
     y_test=y_test.to(device)
 
-    epoch=1
+    epoch=0
     while True:
         model.train()
         batch_loss = 0.0
@@ -126,12 +144,14 @@ def predict_dda(embeddingf, pairf, seed, patience, device,
     # model performance measurement
     model.load_state_dict(torch.load(modelf,map_location=device))
     model.eval()
+    
     with torch.no_grad():
         y_pred=model(x_test)
         test_loss = loss_fn(y_pred.view_as(y_test), y_test)
     print(f'loaded best model "{modelf}", valid loss: {early_stopper.val_loss_min:.3f}, test loss: {test_loss.item():.3f}')
 
     final_test_out=y_pred.cpu().detach().numpy()
+
     fpr, tpr, _ = metrics.roc_curve(y['test'], final_test_out, pos_label=1)
     auroc = metrics.roc_auc_score(y['test'], final_test_out)
     precision, recall, _ = metrics.precision_recall_curve(y['test'], final_test_out)
@@ -145,15 +165,4 @@ def predict_dda(embeddingf, pairf, seed, patience, device,
           
 if __name__ == '__main__':
     args=parse_args()
-    args={'embeddingf':args.embedding_file,
-     'pairf':args.pair_file,
-     'seed':args.seed,
-     'patience':args.patience,
-     'device':args.device,
-     'h_dim':args.h_dim,
-     'lr':args.lr,
-     'modelf':args.model_checkpoint,
-     'testr':args.test_ratio,
-     'validr':args.validation_ratio
-     }
     predict_dda(**args)
