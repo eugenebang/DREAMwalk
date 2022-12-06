@@ -1,5 +1,5 @@
 ## Example codes
-Sample code to generate the embedding space and predict drug-disease associations are provided in [`run_demo.ipynb`](demo/run_demo.ipynb).
+Sample code to generate the embedding space and predict drug-disease associations are provided in [`run_demo.ipynb`](../run_demo.ipynb).
 
 ## Input File formats
 
