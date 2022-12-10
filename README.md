@@ -54,6 +54,7 @@ DREAMwalk training and evaluation were tested for the following python packages 
   - `numpy`=1.23.3
   - `pandas`=1.4.4
   - `scikit-learn`=1.1.3
+  -  `scipy`=1.9.1
   - `tqdm`=4.64.1
   - `parmap`=1.6.0
 - **Additionally requried for link prediction**
