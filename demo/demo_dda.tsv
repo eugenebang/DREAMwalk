@@ -1,0 +1,37 @@
+drug	disease	label
+icosapent	hypertriglyceridemia	1
+penicillin-v-potassium	Gingivostomatitis	1
+penicillin-v-potassium	pneumonia	1
+trimethoprim	Urinary tract infection	1
+trimethoprim	pneumonia	1
+vincristine	Wilm's tumor	1
+vincristine	neuroblastoma	1
+Acetohydroxamic Acid	Urinary tract infection	1
+niacin	hypertriglyceridemia	1
+dacarbazine	neuroblastoma	1
+minocycline	Gingivostomatitis	1
+minocycline	Urinary tract infection	1
+minocycline	pneumonia	1
+amoxicillin	Urinary tract infection	1
+ofloxacin	Urinary tract infection	1
+ofloxacin	pneumonia	1
+gemfibrozil	hypertriglyceridemia	1
+clinofibrate	hypertriglyceridemia	1
+vincristine	hypertriglyceridemia	0
+rupatadine	gingivitis	0
+Hydromorphone	Adenocarcinoma	0
+diphemanil	Optic Neuritis	0
+ciclopirox	Iridocyclitis	0
+Acetohydroxamic Acid	Lung diseases	0
+Levorphanol	Endometrial Carcinoma	0
+esomeprazole	gingivitis	0
+trimethoprim	Wilm's tumor	0
+Levorphanol	Optic Neuritis	0
+prazosin	Optic Neuritis	0
+r(-)-apomorphine	gingivitis	0
+gemfibrozil	Iridocyclitis	0
+rupatadine	hypertriglyceridemia	0
+doxofylline	cardiac arrest	0
+ursodiol	Dyspnea	0
+dorzolamide	attention-deficit/hyperactivity disorder (ADHD)	0
+ursodiol	sitosterolemia	0
