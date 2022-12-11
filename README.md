@@ -20,9 +20,9 @@ First, clone this repository and move to the directory.
 ```
 git clone https://github.com/eugenebang/DREAMwalk.git
 ```
-To install the appropriate environment for Chromoformer, you should install [conda](https://docs.conda.io/en/latest/) package manager.
+To install the appropriate environment for DREAMwalk, you should install [conda](https://docs.conda.io/en/latest/) package manager.
 
-After installing `conda` and placing the `conda` executable in `PATH`, the following command will create `conda` environment named `dreamwlk` installed with a GPU-compatible version of `pytorch`. It will take up to 30 minutes to setup the environment, but may vary upon the Internet connection and package cache states.
+After installing `conda` and placing the `conda` executable in `PATH`, the following command will create `conda` environment named `dreamwalk` installed with a GPU-compatible version of `pytorch`. It will take up to 30 minutes to setup the environment, but may vary upon the Internet connection and package cache states.
 ```
 conda env create -f environment.yaml && \
 conda activate dreamwalk && \
