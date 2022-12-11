@@ -3331,21 +3331,3 @@ CDH1	4233	3	1.0	3327
 6337	6338	3	1.0	3330
 MT-CO2	MT-CO1	3	1.0	3331
 2566	1816	3	1.0	3332
-icosapent	hypertriglyceridemia	4	1.0	3333
-penicillin-v-potassium	Gingivostomatitis	4	1.0	3334
-penicillin-v-potassium	pneumonia	4	1.0	3335
-trimethoprim	Urinary tract infection	4	1.0	3336
-trimethoprim	pneumonia	4	1.0	3337
-vincristine	Wilm's tumor	4	1.0	3338
-vincristine	neuroblastoma	4	1.0	3339
-Acetohydroxamic Acid	Urinary tract infection	4	1.0	3340
-niacin	hypertriglyceridemia	4	1.0	3341
-dacarbazine	neuroblastoma	4	1.0	3342
-minocycline	Gingivostomatitis	4	1.0	3343
-minocycline	Urinary tract infection	4	1.0	3344
-minocycline	pneumonia	4	1.0	3345
-amoxicillin	Urinary tract infection	4	1.0	3346
-ofloxacin	Urinary tract infection	4	1.0	3347
-ofloxacin	pneumonia	4	1.0	3348
-gemfibrozil	hypertriglyceridemia	4	1.0	3349
-clinofibrate	hypertriglyceridemia	4	1.0	3350
