@@ -19,6 +19,7 @@ def parse_args():
     parser.add_argument('--network_file', type=str, required=True)
     
     parser.add_argument('--sim_network_file', type=str, default='')
+    parser.add_argument('--node_type_file', type=str, default=None)
     parser.add_argument('--output_file', type=str, default='embedding_file.pkl')
     parser.add_argument('--seed', type=float, default=42)
     parser.add_argument('--tp_factor', type=float, default=0.5)
@@ -42,6 +43,7 @@ def parse_args():
         'netf':args.network_file,
         'sim_netf':args.sim_network_file,
         'outputf':args.output_file,
+        'nodetypef':args.node_type_file,
         'tp_factor':args.tp_factor,
         'seed':args.seed,
         'weighted':args.weighted,
