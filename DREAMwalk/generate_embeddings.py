@@ -11,8 +11,7 @@ from tqdm import tqdm
 import parmap
 from collections import defaultdict, Counter
 
-from gensim.models import Word2Vec
-
+from DREAMwalk.HeterogeneousSG import HeterogeneousSG
 from DREAMwalk.utils import read_graph, set_seed
 
 def parse_args():
@@ -266,7 +265,8 @@ def _teleport_operation(cur,G_sim):
                 break
     return next
 
-def save_embedding_files(netf:str, sim_netf:str, outputf:str, tp_factor:float=0.5, seed:int=42,
+def save_embedding_files(netf:str, sim_netf:str, outputf:str, nodetypef:str=None, 
+                         tp_factor:float=0.5, seed:int=42,
                          directed:bool=False, weighted:bool=True, em_max_iter:int=5,
                          num_walks:int=100, walk_length:int=10, workers:int=os.cpu_count(), 
                          dimension:int=128, window_size:int=4, p:float=1, q:float=1, 
@@ -291,18 +291,15 @@ def save_embedding_files(netf:str, sim_netf:str, outputf:str, tp_factor:float=0.
     print('Generating paths...')
     walks=generate_DREAMwalk_paths(G,G_sim,trans_matrix,p,q,num_walks,
                                    walk_length,tp_factor, workers)
+#     with open('tmp_walk_file.pkl','wb') as fw:
+#         pickle.dump(walks,fw)
     
     print('Generating node embeddings...')
-    model = Word2Vec(walks, vector_size=dimension, window=window_size, 
-                     min_count=0, sg=1, workers=workers, seed=seed)
-    node_ids=model.wv.index_to_key
-    node_embeddings=model.wv.vectors
-
-    model_embeddings={}
-    for i,idx in enumerate(node_ids):
-        model_embeddings[idx]=node_embeddings[i]
+    use_hetSG = True if nodetypef != None else False
+    embeddings = HeterogeneousSG(use_hetSG, walks, set(G.nodes()), nodetypef=nodetypef,
+                                 embedding_size=dimension, window_length=window_size, workers=workers)
     with open(outputf,'wb') as fw:
-        pickle.dump(model_embeddings,fw)
+        pickle.dump(embeddings,fw)
 
     print(f'Node embeddings saved: {outputf}')
 

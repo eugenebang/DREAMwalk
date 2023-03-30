@@ -6,6 +6,7 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, average_precision_score
 
+
 from DREAMwalk.utils import set_seed
 
 def parse_args():
@@ -77,29 +78,24 @@ def return_scores(target_list, pred_list):
 
 def predict_dda(embeddingf:str, pairf:str, modelf:str='clf.pkl', seed:int=42,
                 validr:float=0.1, testr:float=0.1):
+
     set_seed(seed)
+    x,y = split_dataset(pairf, embeddingf, validr, testr, seed)
     
-    # split dataset
-    x, y = split_dataset(pairf, embeddingf, validr, testr, seed)
-    
-    # xgboost classifier 
     clf = XGBClassifier(base_score = 0.5, booster = 'gbtree',eval_metric ='error',objective = 'binary:logistic',
         gamma = 0,learning_rate = 0.1, max_depth = 6,n_estimators = 500,
         tree_method = 'auto',min_child_weight = 4,subsample = 0.8, colsample_bytree = 0.9,
         scale_pos_weight = 1,max_delta_step = 1,seed = seed)
     
-    # train
     clf.fit(x['train'], y['train'])
     
-    # scores
     preds = {}
     scores = {}
     for split in ['train','valid','test']:
         preds[split] = clf.predict_proba(np.array(x[split]))[:, 1]
         scores[split] = return_scores(y[split], preds[split])
         print(f'{split.upper():5} set | Acc: {scores[split][0]*100:.2f}% | AUROC: {scores[split][1]:.4f} | AUPR: {scores[split][2]:.4f} | F1-score: {scores[split][3]:.4f}')
-
-    # save model
+    
     with open(modelf,'wb') as fw:
         pickle.dump(clf, fw)
     print(f'saved XGBoost classifier: {modelf}')
