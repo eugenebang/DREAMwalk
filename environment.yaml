@@ -12,3 +12,4 @@ dependencies:
   - numpy=1.23.3
   - tqdm=4.64.1
   - parmap=1.6.0
+  - xgboost=1.7.4
