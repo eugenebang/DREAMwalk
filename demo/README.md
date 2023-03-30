@@ -24,6 +24,20 @@ The input network file should be a tab- or space-separated `.txt` file with foll
 source target weight edge_type edge_id
 ```
 
+### Node type label file
+
+The input node type label file for heterogeneous Skip-gram should be a '.tsv' file with following information:
+| node | type  |
+| ------- | --- |
+| node 1 | gene |
+| node 2 | disease |
+| node 3 | gene |
+| ... | ... | 
+| node n | drug |
+| ... | ... | 
+
+_Caution:_ The drug, disease and gene node types should be given as `drug`, `disease`, `gene` for the model to properly recognize its type.
+
 ### Positive/negative drug-disease association file
 
 Positive/negative pair information for drug-disease association prediction task should be input as a `.tsv` file with following structure:
