@@ -22,11 +22,10 @@ git clone https://github.com/eugenebang/DREAMwalk.git
 ```
 To install the appropriate environment for DREAMwalk, you should install [conda](https://docs.conda.io/en/latest/) package manager.
 
-After installing `conda` and placing the `conda` executable in `PATH`, the following command will create `conda` environment named `dreamwalk` installed with a GPU-compatible version of `pytorch`. It will take up to 30 minutes to setup the environment, but may vary upon the Internet connection and package cache states.
+After installing `conda` and placing the `conda` executable in `PATH`, the following command will create `conda` environment named `dreamwalk`. It will take up to 10 minutes to setup the environment, but may vary upon the Internet connection and package cache states.
 ```
 conda env create -f environment.yaml && \
-conda activate dreamwalk && \
-conda install pytorch==1.9.0 torchvision==0.10.0 torchaudio==0.9.0 cudatoolkit=11.1 -c pytorch -c conda-forge
+conda activate dreamwalk &&
 ```
 
 To check whether DREAMwalk works properly, please refer to the Example codes section below.
@@ -57,8 +56,7 @@ DREAMwalk training and evaluation were tested for the following python packages 
   -  `scipy`=1.9.1
   - `tqdm`=4.64.1
   - `parmap`=1.6.0
-- **Additionally requried for link prediction**
-  - `pytorch`=1.9.0 (installed using cuda version 11.1)
+  - `xgboost`=1.7.4
   
 ## Citation
 Bang, D., Lim, S., Lee, S., & Kim, S. Multi-layer guilt-by-association-based drug repurposing by integrating clinical knowledge on biological heterogeneous networks. _bioRxiv_ (2022)
