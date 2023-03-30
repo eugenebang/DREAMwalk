@@ -4,7 +4,6 @@ channels:
   - defaults
 dependencies:
   - python=3.8
-  - gensim=4.2.0
   - networkx=2.8.8
   - pandas=1.4.4
   - scikit-learn=1.1.3
