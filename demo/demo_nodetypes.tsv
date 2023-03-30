@@ -40,6 +40,25 @@ amoxicillin	drug
 adiphenine	drug
 Adenocarcinoma	drug
 Acetohydroxamic Acid	drug
+Wilm's tumor	disease
+Urinary tract infection	disease
+Gingivostomatitis	disease
+gingivitis	disease
+Epileptic drop attack	disease
+Endometrial Carcinoma	disease
+Dyspnea	disease
+"Dermatitis, Allergic Contact"	disease
+cardiac arrest	disease
+attention-deficit/hyperactivity disorder (ADHD)	disease
+sitosterolemia	disease
+pneumonia	disease
+Optic Neuritis	disease
+neuroblastoma	disease
+Lung diseases	disease
+Iridocyclitis	disease
+hypocalcemia	disease
+hypertriglyceridemia	disease
+Hyperbilirubinemia	disease
 ZDHHC9	gene
 ZBTB24	gene
 ZAP70	gene
@@ -679,22 +698,3 @@ A2M	gene
 2903	gene
 2566	gene
 1816	gene
-Wilm's tumor	indication
-Urinary tract infection	indication
-Gingivostomatitis	indication
-gingivitis	indication
-Epileptic drop attack	indication
-Endometrial Carcinoma	indication
-Dyspnea	indication
-Dermatitis, Allergic Contact	indication
-cardiac arrest	indication
-attention-deficit/hyperactivity disorder (ADHD)	indication
-sitosterolemia	indication
-pneumonia	indication
-Optic Neuritis	indication
-neuroblastoma	indication
-Lung diseases	indication
-Iridocyclitis	indication
-hypocalcemia	indication
-hypertriglyceridemia	indication
-Hyperbilirubinemia	indication
