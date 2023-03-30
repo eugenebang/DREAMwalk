@@ -1,15 +1,12 @@
 import argparse
-
 import pickle
 import numpy as np
-from sklearn import metrics 
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, average_precision_score
 
-from DREAMwalk.utils import set_seed, EarlyStopper
+from DREAMwalk.utils import set_seed
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -17,150 +14,95 @@ def parse_args():
     parser.add_argument('--pair_file', type=str, required=True)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--patience', type=int, default=20)
-    parser.add_argument('--device', type=str, 
-                default=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'))
-    parser.add_argument('--h_dim', type=int, default=64)
-    parser.add_argument('--lr', type=float, default=0.001)
-    parser.add_argument('--model_checkpoint', type=str, default='checkpoint.pt')
+    parser.add_argument('--model_checkpoint', type=str, default='clf.pkl')
     parser.add_argument('--test_ratio', type=float, default=0.1)
-    parser.add_argument('--validation_ratio', type=float, default=0.1)
+    parser.add_argument('--valid_ratio', type=float, default=0.1)
     
-    args=parser.parse_args()
-    args={'embeddingf':args.embedding_file,
+    args = parser.parse_args()
+    args = {'embeddingf':args.embedding_file,
      'pairf':args.pair_file,
      'seed':args.seed,
      'patience':args.patience,
-     'device':args.device,
-     'h_dim':args.h_dim,
-     'lr':args.lr,
      'modelf':args.model_checkpoint,
      'testr':args.test_ratio,
      'validr':args.validation_ratio
      }
     return args
-
-
-class mlp_model(nn.Module):
-    def __init__(self,input_dim=128,h_dim=64):
-        super(mlp_model,self).__init__()
-        self.lin1=nn.Linear(input_dim,h_dim)
-        self.lin2=nn.Linear(h_dim,1)
-        
-    def forward(self,x):
-        x=F.relu(self.lin1(x))
-        return torch.sigmoid(self.lin2(x))
     
 def split_dataset(pairf, embeddingf,validr, testr, seed):
     with open(embeddingf,'rb') as fin:
-        embedding_dict=pickle.load(fin)
+        embedding_dict = pickle.load(fin)
     
-    xs,ys=[],[]
+    xs,ys = [],[]
     with open(pairf,'r') as fin:
-        lines=fin.readlines()
+        lines = fin.readlines()
         
     for line in lines[1:]:
-        line=line.strip().split('\t')
-        drug=line[0]
-        dis=line[1]
-        label=line[2]
+        line = line.strip().split('\t')
+        drug = line[0]
+        dis = line[1]
+        label = line[2]
         xs.append(embedding_dict[drug]-embedding_dict[dis])
         ys.append(int(label))
         
     # dataset split
     x,y = {},{}
-    x['train'],x['test'],y['train'],y['test']=train_test_split(
-        xs,ys,test_size=testr, random_state=seed, stratify=ys)
+    x['train'],x['test'],y['train'],y['test'] = train_test_split(
+        xs,ys,test_size = testr, random_state = seed, stratify = ys)
     if validr > 0:
-        x['train'],x['valid'],y['train'],y['valid']=train_test_split(
-            x['train'],y['train'],test_size=validr/(1-testr), 
-            random_state=seed, stratify=y['train'])
+        x['train'],x['valid'],y['train'],y['valid'] = train_test_split(
+            x['train'],y['train'],test_size = validr/(1-testr), 
+            random_state = seed, stratify = y['train'])
     else:
-        x['valid'],y['valid']=[],[]
+        x['valid'],y['valid'] = [],[]
 
     return x, y
 
-def predict_dda(embeddingf:str, pairf:str, modelf:str, seed:int=42, patience:int=20,
-                device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
-                h_dim:int=128, lr:float=0.001, validr:float=0.1, testr:float=0.1):
+def return_scores(target_list, pred_list):
+    metric_list = [
+        accuracy_score, 
+        roc_auc_score, 
+        average_precision_score, 
+        f1_score
+    ] 
+    
+    scores = []
+    for metric in metric_list:
+        if metric in [roc_auc_score, average_precision_score]:
+            scores.append(metric(target_list,pred_list))
+        else: # accuracy_score, f1_score
+            scores.append(metric(target_list, pred_list.round())) 
+    return scores
 
+
+def predict_dda(embeddingf:str, pairf:str, modelf:str='clf.pkl', seed:int=42,
+                validr:float=0.1, testr:float=0.1):
     set_seed(seed)
-    x,y=split_dataset(pairf, embeddingf,
-                    validr, testr, seed)
     
-    x_train = torch.tensor(np.array(x['train']), dtype=torch.float32)
-    y_train = torch.tensor(y['train'], dtype=torch.float32)
-
-    x_valid = torch.tensor(np.array(x['valid']), dtype=torch.float32)
-    y_valid = torch.tensor(y['valid'], dtype=torch.float32)
-
-    x_test = torch.tensor(np.array(x['test']), dtype=torch.float32)
-    y_test = torch.tensor(y['test'], dtype=torch.float32)
+    # split dataset
+    x, y = split_dataset(pairf, embeddingf, validr, testr, seed)
     
-    input_dim=x_test[0].shape[0]
-    model=mlp_model(input_dim, h_dim)
-    early_stopper = EarlyStopper(patience=patience,
-            printfunc=print,verbose=False,path=modelf)
-
-    loss_fn = nn.BCEWithLogitsLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    losses = []
+    # xgboost classifier 
+    clf = XGBClassifier(base_score = 0.5, booster = 'gbtree',eval_metric ='error',objective = 'binary:logistic',
+        gamma = 0,learning_rate = 0.1, max_depth = 6,n_estimators = 500,
+        tree_method = 'auto',min_child_weight = 4,subsample = 0.8, colsample_bytree = 0.9,
+        scale_pos_weight = 1,max_delta_step = 1,seed = seed)
     
-    # model training    
-    model=model.to(device)
-    x_train=x_train.to(device)
-    y_train=y_train.to(device)
-    x_valid=x_valid.to(device)
-    y_valid=y_valid.to(device)
-    x_test=x_test.to(device)
-    y_test=y_test.to(device)
-
-    epoch=0
-    while True:
-        model.train()
-        batch_loss = 0.0
-        optimizer.zero_grad()
-        y_pred = model(x_train)
-        loss = loss_fn(y_pred.view_as(y_train), y_train)
-        loss.backward()
-        optimizer.step()
-        batch_loss += loss.item()
-        losses.append(batch_loss)
-
-        with torch.no_grad():
-            model.eval()
-            y_pred=model(x_valid)
-            valid_loss= loss_fn(y_pred.view_as(y_valid), y_valid)
-            y_pred=model(x_test)
-            test_loss = loss_fn(y_pred.view_as(y_test), y_test)
-
-        print(f'[Epoch {epoch:3}] Train loss:{loss.item():.3f}, Valid loss: {valid_loss.item():.3f}, Test loss: {test_loss.item():.3f}')
-
-        early_stopper(valid_loss, model)
-        if early_stopper.early_stop:
-            print()
-            break
-        epoch+=1
+    # train
+    clf.fit(x['train'], y['train'])
     
-    # model performance measurement
-    model.load_state_dict(torch.load(modelf,map_location=device))
-    model.eval()
-    
-    with torch.no_grad():
-        y_pred=model(x_test)
-        test_loss = loss_fn(y_pred.view_as(y_test), y_test)
-    print(f'loaded best model "{modelf}", valid loss: {early_stopper.val_loss_min:.3f}, test loss: {test_loss.item():.3f}')
+    # scores
+    preds = {}
+    scores = {}
+    for split in ['train','valid','test']:
+        preds[split] = clf.predict_proba(np.array(x[split]))[:, 1]
+        scores[split] = return_scores(y[split], preds[split])
+        print(f'{split.upper():5} set | Acc: {scores[split][0]*100:.2f}% | AUROC: {scores[split][1]:.4f} | AUPR: {scores[split][2]:.4f} | F1-score: {scores[split][3]:.4f}')
 
-    final_test_out=y_pred.cpu().detach().numpy()
-
-    fpr, tpr, _ = metrics.roc_curve(y['test'], final_test_out, pos_label=1)
-    auroc = metrics.roc_auc_score(y['test'], final_test_out)
-    precision, recall, _ = metrics.precision_recall_curve(y['test'], final_test_out)
-    aupr = metrics.auc(recall, precision)
-    output_prob=[1 if i>0.5 else 0 for i in final_test_out]
-    acc=metrics.accuracy_score(y['test'], output_prob)
-    f1 = metrics.f1_score(y['test'], output_prob)
-
-    print(f'Best model performance: AUROC {auroc:.3f}, AUPR {aupr:.3f}, Acc {acc:.3f}, F1 {f1:.3f}')
+    # save model
+    with open(modelf,'wb') as fw:
+        pickle.dump(clf, fw)
+    print(f'saved XGBoost classifier: {modelf}')
     print('='*50)
           
 if __name__ == '__main__':
