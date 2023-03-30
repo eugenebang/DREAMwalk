@@ -7,7 +7,7 @@ We also provide codes for calculating semantic similarities of entities given hi
 
 The full model architecture is provided below. DREAMwalk's drug-disease association prediction pipeline is consisted of three steps;
 
-Step 1. Create semantic similarity network from clinical hierarchies
+Step 1. Create semantic similarity network from semantic hierarchies
 
 Step 2. Node embedding generation through teleport-guided random walk
 
@@ -25,7 +25,7 @@ To install the appropriate environment for DREAMwalk, you should install [conda]
 After installing `conda` and placing the `conda` executable in `PATH`, the following command will create `conda` environment named `dreamwalk`. It will take up to 10 minutes to setup the environment, but may vary upon the Internet connection and package cache states.
 ```
 conda env create -f environment.yaml && \
-conda activate dreamwalk &&
+conda activate dreamwalk
 ```
 
 To check whether DREAMwalk works properly, please refer to the Example codes section below.
@@ -48,7 +48,6 @@ DREAMwalk training and evaluation were tested for the following python packages 
 
 - **For embedding generation**
   - `python`= 3.8
-  - `gensim`= 4.2.0
   - `networkx`= 2.8.8
   - `numpy`=1.23.3
   - `pandas`=1.4.4
