@@ -1,32 +1,6 @@
 //  The metapath2vec.pp code was built upon the word2vec.c from https://code.google.com/archive/p/word2vec/
-
 //  Modifications Copyright (C) 2016 <ericdongyx@gmail.com>
-//
 //  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-
-//  Copyright 2013 Google Inc. All Rights Reserved.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -96,11 +70,6 @@ void NodeType() {
       a_table.push_back(target);
     }
   }
-//  std::cout << "table_size     " << table_size << std::endl;
-//  std::cout << "drug_table.size() " << v_table.size() << std::endl;
-//  std::cout << "disease_table.size() " << i_table.size() << std::endl;
-//  std::cout << "gene_table.size() " << f_table.size() << std::endl;
-//  std::cout << "etcetera_table.size() " << a_table.size() << std::endl;
 }
 
 void InitUnigramTable() {
@@ -334,10 +303,6 @@ void LearnVocabFromTrainFile() {
     ReadWord(word, fin);
     if (feof(fin)) break;
     train_words++;
-//    if ((debug_mode > 1) && (train_words % 100000 == 0)) {
-//      printf("%lldK%c", train_words / 1000, 13);
-//      fflush(stdout);
-//    }
     i = SearchVocab(word);
     if (i == -1) {
       a = AddWordToVocab(word);
@@ -347,8 +312,6 @@ void LearnVocabFromTrainFile() {
   }
   SortVocab();
   if (debug_mode > 0) {
-//    printf("Vocab size: %lld\n", vocab_size);
-//    printf("Words in train file: %lld\n", train_words);
   }
   file_size = ftell(fin);
   fclose(fin);
@@ -381,8 +344,6 @@ void ReadVocab() {
   }
   SortVocab();
   if (debug_mode > 0) {
-//    printf("Vocab size: %lld\n", vocab_size);
-//    printf("Words in train file: %lld\n", train_words);
   }
   fin = fopen(train_file, "rb");
   if (fin == NULL) {
@@ -426,7 +387,6 @@ void *TrainModelThread(void *id) {
   long long l1, l2, c, target, label, local_iter = iter;
   unsigned long long next_random = (long long)id;
   real f, g;
-//  clock_t now;
   real *neu1 = (real *)calloc(layer1_size, sizeof(real));
   real *neu1e = (real *)calloc(layer1_size, sizeof(real));
   FILE *fi = fopen(train_file, "rb");
@@ -435,13 +395,6 @@ void *TrainModelThread(void *id) {
     if (word_count - last_word_count > 10000) {
       word_count_actual += word_count - last_word_count;
       last_word_count = word_count;
-//      if ((debug_mode > 1)) {
-//        now=clock();
-//        printf("%cAlpha: %f  Progress: %.2f%%  Words/thread/sec: %.2fk  ", 13, alpha,
-//         word_count_actual / (real)(iter * train_words + 1) * 100,
-//         word_count_actual / ((real)(now - start + 1) / (real)CLOCKS_PER_SEC * 1000));
-//        fflush(stdout);
-//      }
       alpha = starting_alpha * (1 - word_count_actual / (real)(iter * train_words + 1));
       if (alpha < starting_alpha * 0.0001) alpha = starting_alpha * 0.0001;
     }
@@ -547,7 +500,6 @@ void TrainModel() {
   long a, b, c, d;
   FILE *fo, *fp;
   pthread_t *pt = (pthread_t *)malloc(num_threads * sizeof(pthread_t));
-//  printf("Starting training using file %s\n", train_file);
   starting_alpha = alpha;
   if (read_vocab_file[0] != 0) ReadVocab(); else LearnVocabFromTrainFile();
   if (save_vocab_file[0] != 0) SaveVocab();
@@ -637,47 +589,6 @@ int ArgPos(char *str, int argc, char **argv) {
 
 int main(int argc, char **argv) {
   int i;
-  if (argc == 1) {
-    printf("---metapath2vec & metapath2vec++---\n");
-    printf("---The code and following instructions are built upon word2vec.c by Mikolov et al.---\n\n");
-
-    printf("Options:\n");
-    printf("Parameters for training:\n");
-    printf("\t-train <file>\n");
-    printf("\t\tUse text data from <file> to train the model\n");
-    printf("\t-output <file>\n");
-    printf("\t\tUse <file> to save the resulting word vectors / word clusters\n");
-    printf("\t-size <int>\n");
-    printf("\t\tSet size of word vectors; default is 100\n");
-    printf("\t-window <int>\n");
-    printf("\t\tSet max skip length between words; default is 5\n");
-    printf("\t-sample <float>\n");
-    printf("\t\tSet threshold for occurrence of words. Those that appear with higher frequency in the training data\n");
-    printf("\t\twill be randomly down-sampled; default is 1e-3, useful range is (0, 1e-5)\n");
-    printf("\t-pp <int>\n");
-    printf("\t\tUse metapath2vec++ or metapath2vec; default is 1 (metapath2vec++); for metapath2vec, use 0\n");  
-    printf("\t-negative <int>\n");
-    printf("\t\tNumber of negative examples; default is 5, common values are 3 - 10 (0 = not used)\n");
-    printf("\t-threads <int>\n");
-    printf("\t\tUse <int> threads (default 12)\n");
-    printf("\t-iter <int>\n");
-    printf("\t\tRun more training iterations (default 5)\n");
-    printf("\t-min-count <int>\n");
-    printf("\t\tThis will discard words that appear less than <int> times; default is 5\n");
-    printf("\t-alpha <float>\n");
-    printf("\t\tSet the starting learning rate; default is 0.025 for skip-gram\n");
-    printf("\t-classes <int>\n");
-    printf("\t\tOutput word classes rather than word vectors; default number of classes is 0 (vectors are written)\n");
-    printf("\t-debug <int>\n");
-    printf("\t\tSet the debug mode (default = 2 = more info during training)\n");
-    printf("\t-save-vocab <file>\n");
-    printf("\t\tThe vocabulary will be saved to <file>\n");
-    printf("\t-read-vocab <file>\n");
-    printf("\t\tThe vocabulary will be read from <file>, not constructed from the training data\n");
-    printf("\nExamples:\n");
-    printf("./metapath2vec -train ../in_dbis/dbis.cac.w1000.l100.txt -output ../out_dbis/dbis.cac.w1000.l100 -pp 1 -size 128 -window 7 -negative 5 -threads 32 \n\n");
-    return 0;
-  }
   output_file[0] = 0;
   save_vocab_file[0] = 0;
   read_vocab_file[0] = 0;
