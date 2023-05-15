@@ -1,4 +1,6 @@
 # DREAMwalk
+[![DOI](https://zenodo.org/badge/562475574.svg)](https://zenodo.org/badge/latestdoi/562475574)
+
 The official code implementation for DREAMwalk from our paper, [Multi-layer Guilt-by-association for drug repurposing by integrating clinical knowledge on biological heterogeneous networks](https://www.biorxiv.org/content/10.1101/2022.11.22.517225v1).
 
 We also provide codes for calculating semantic similarities of entities given hierarchy data, along with example heterogeneous network file and notebook file for generating node embedding and predicting associations.
