@@ -1,7 +1,7 @@
 # DREAMwalk
 [![DOI](https://zenodo.org/badge/562475574.svg)](https://zenodo.org/badge/latestdoi/562475574)
 
-The official code implementation for DREAMwalk from our paper, [Multi-layer Guilt-by-association for drug repurposing by integrating clinical knowledge on biological heterogeneous networks](https://www.biorxiv.org/content/10.1101/2022.11.22.517225v1).
+The official code implementation for DREAMwalk from our paper, [Biomedical knowledge graph learning for drug repurposing by extending guilt-by-association to multiple layers](https://www.nature.com/articles/s41467-023-39301-y).
 
 We also provide codes for calculating semantic similarities of entities given hierarchy data, along with example heterogeneous network file and notebook file for generating node embedding and predicting associations.
 
@@ -60,13 +60,16 @@ DREAMwalk training and evaluation were tested for the following python packages 
   - `xgboost`=1.7.4
   
 ## Citation
-Bang, D., Lim, S., Lee, S., & Kim, S. Multi-layer guilt-by-association-based drug repurposing by integrating clinical knowledge on biological heterogeneous networks. _bioRxiv_ (2022)
+Bang, D., Lim, S., Lee, S., & Kim, S. Biomedical knowledge graph learning for drug repurposing by extending guilt-by-association to multiple layers. _Nature Communications_ (2023)
 ```
-@article{bang2022multi,
-  title={Multi-layer guilt-by-association-based drug repurposing by integrating clinical knowledge on biological heterogeneous networks},
+@article{bang2023biomedical,
+  title={Biomedical knowledge graph learning for drug repurposing by extending guilt-by-association to multiple layers},
   author={Bang, Dongmin and Lim, Sangsoo and Lee, Sangseon and Kim, Sun},
-  journal={bioRxiv},
-  year={2022},
-  publisher={Cold Spring Harbor Laboratory}
+  journal={Nature Communications},
+  volume={14},
+  number={1},
+  pages={3570},
+  year={2023},
+  publisher={Nature Publishing Group UK London}
 }
 ```
